@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <title>Swing: get it on the way!</title>
+    <meta charset='utf-8' />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta content='' name='description' />
+    <meta content='' name='author' />
+      <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+      <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+
+
+      <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+      <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+      <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+
+
+
+      <script type="text/javascript" src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+      <script type="text/javascript"
+              src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHAt76UqrnV9QeM7LsaegVzW3bQLA9hHk&sensor=true">
+      </script>
+      <script type="text/javascript" src="map.js"></script>
+  </head>
+
+
+
+
+  <body>
+    <div class='navbar navbar-default navbar-static-top'>
+      <div class='container'>
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class='navbar-brand' href='index.html'>Swing, get it on the way!</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li class='active'><a href="index.html">Map</a></li>
+            <!--<li><a href="#">About</a></li>-->
+
+          </ul>
+
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+    <div class='container'>
+      <div class='row'>
+        <div class='col-md-4'>
+          <!--<p> start here</p>-->
+          <div class='well'>
+            <div id="queryinfo">
+                <h5>Start</h5> <input type="text" class="form-control" id="start" placeholder='Palo Alto'>
+                <h5>Destination</h5> <input class="form-control" id="dest" type="text" placeholder='San Francisco'>
+                <h5>Swing by</h5> <input class="form-control" id="swingBy" type="text" placeholder='Burger'>
+                <br />
+                <button class='btn btn-primary' id='search' href='#'>
+                <i class='glyphicon glyphicon-search'></i>
+                Search
+                </button>
+            </div>
+
+
+
+              <table id="resultsTable"  class="table tablesorter">
+                  <thead>
+                  <tr>
+                      <th>Business</th>
+                      <th>1st half</th>
+                      <th>2nd half</th>
+                      <th>total time</th>
+                      <!--<td>Add Rows?</td>-->
+                  </tr>
+                  </thead>
+                  <tbody>
+
+                  </tbody>
+              </table>
+              <br/>
+              <p>This app is at a very early stage, so your input will be highly appreciated!</p>
+              <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                  Leave a comment
+              </button>
+
+
+          </div>
+        </div>
+        <div class='col-md-8'>
+          <noscript>
+            <div class='alert alert-info'>
+              <h4>Your JavaScript is disabled</h4>
+              <p>Please enable JavaScript to view the map.</p>
+            </div>
+          </noscript>
+          <div id="map-canvas"></div>
+
+          <!--<p class='pull-right'> Yolo  </p>-->
+
+
+        </div>
+          <!-- Button trigger modal -->
+
+
+          <!-- Modal -->
+          <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                          <h4 class="modal-title" id="myModalLabel">Feedback</h4>
+                      </div>
+                      <div class="modal-body">
+                          <form id="fbform" role="form" name="input" action="http://localhost:8000/" method="GET">
+                              <div class="form-group">
+                                  Name<input class="form-control" type="text" name="name">
+                                  Email <input class="form-control" type="email" name="email">
+                                  Subject  <input class="form-control" type="text" name="subject">
+                                  Comments <textarea rows="6" class="form-control" type="text" name="comments"></textarea>
+                                  <br/>
+
+                                  <input type="submit" class="btn btn-primary pull-right" value="Submit">
+                                  <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+                                  <br/>
+
+                              </div>
+
+                          </form>
+                      </div>
+                      <!--<div class="modal-footer">-->
+
+                          <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+                      <!--</div>-->
+                  </div>
+              </div>
+          </div>
+
+      </div>
+    </div>
+
+    <script type='text/javascript'>
+        $(window).resize(function () {
+          var h = $(window).height(),
+            offsetTop = 105; // Calculate the top offset
+          $('#map-canvas').css('height', (h - offsetTop));
+        }).resize();
+    </script>
+
+    <script type="text/javascript" src="__jquery.tablesorter/jquery.tablesorter.js"></script>
+
+    <script>
+        var start ='';
+        var dest='';
+        var swingBy='';
+
+        $( "#start" ).keydown(function( event ) {
+            start = $( "#start").val();
+            if ( event.which == 13 ) {
+                checkAllParameters();
+            }
+        });
+        $( "#dest" ).keydown(function( event ) {
+            dest = $( "#dest").val();
+            if ( event.which == 13 ) {
+                checkAllParameters();
+            }
+        });
+        $( "#swingBy" ).keydown(function( event ) {
+            swingBy = $( "#swingBy").val();
+            if ( event.which == 13 ) {
+                checkAllParameters();
+            }
+        });
+
+        $( "#search" ).click(function( event ) {
+                checkAllParameters();
+        });
+
+        function checkAllParameters(){
+            start = $( "#start").val();
+            dest = $( "#dest").val();
+            swingBy = $( "#swingBy").val();
+            if (start!='' && dest!='' && swingBy!=''){
+                console.log(start,dest,swingBy);
+                calcRoute(start,dest,swingBy);
+            }
+        }
+
+        $( document ).ready(function() {
+            $('#resultsTable').hide();
+            $("#resultsTable").tablesorter();
+        });
+
+    </script>
+
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-6836550-4', 'swingit.us');
+        ga('send', 'pageview');
+
+    </script>
+
+
+  </body>
+</html>

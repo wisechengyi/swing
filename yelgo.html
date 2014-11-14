@@ -1,0 +1,119 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome to Swing</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+        html { height: 100% }
+        body { height: 100%; width: 100%}
+
+        #infoPanel {
+            height:200px;width:auto;float:left;
+        }
+
+        #map-canvas {
+            height: 100%;
+            margin-left: auto;
+            /*padding-left: 400px;*/
+            /*height:200px;width:400px;*/
+            min-width: 400px;
+            /*float:left;*/
+            /*margin-right: 0px;*/
+        }
+
+
+    </style>
+    <script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHAt76UqrnV9QeM7LsaegVzW3bQLA9hHk&sensor=true">
+    </script>
+    <script type="text/javascript"
+            src="map.js">
+    </script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript" src="/__jquery.tablesorter/jquery.tablesorter.js"></script>
+
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+
+
+
+</head>
+<body>
+<div id="infoPanel">
+    <form role="form">
+        <div class="form-group">
+        <label>Start</label> <input type="text" class="form-control" id="start">
+        <label>Destination</label> <input class="form-control" id="dest" type="text">
+        <label>Swing by</label> <input class="form-control" id="swingBy" type="text">
+        </div>
+        <!--<ul><button onclick="checkAllParameters()">Swing!</button></ul>-->
+    </form>
+
+    <table id="resultsTable" class="table">
+        <thead>
+        <tr>
+            <th>Business</th>
+            <th>1st half</th>
+            <th>2nd half</th>
+            <th>total time</th>
+            <!--<td>Add Rows?</td>-->
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</div>
+
+<div id="map-canvas"/>
+
+
+
+
+<script>
+    var start ='';
+    var dest='';
+    var swingBy='';
+
+    $( "#start" ).keydown(function( event ) {
+        start = $( "#start").val();
+        if ( event.which == 13 ) {
+            checkAllParameters();
+        }
+    });
+    $( "#dest" ).keydown(function( event ) {
+        dest = $( "#dest").val();
+        if ( event.which == 13 ) {
+            checkAllParameters();
+        }
+    });
+    $( "#swingBy" ).keydown(function( event ) {
+        swingBy = $( "#swingBy").val();
+        if ( event.which == 13 ) {
+            checkAllParameters();
+        }
+    });
+
+    function checkAllParameters(){
+        start = $( "#start").val();
+        dest = $( "#dest").val();
+        swingBy = $( "#swingBy").val();
+        if (start!='' && dest!='' && swingBy!=''){
+            console.log(start,dest,swingBy);
+            calcRoute(start,dest,swingBy);
+        }
+    }
+
+    $(document).ready(function()
+            {
+                $("#resultsTable").tablesorter();
+            }
+    );
+</script>
+
+
+
+</body>
+</html>
