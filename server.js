@@ -15,8 +15,13 @@ my_http.createServer(function (request, response) {
 
 
     query = getUrlVars(request.url);
-    sys.puts("request accepted");
+//	console.log(query);
     response.setHeader('Access-Control-Allow-Origin', '*');
+    if (query.lat==undefined || query.lng==undefined){
+	        response.write("{error:\"no location info\"")
+                response.end();
+	}
+    sys.puts("request accepted");
     // Request methods you wish to allow
 //    response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
 //
@@ -30,10 +35,20 @@ my_http.createServer(function (request, response) {
 
 
 //    console.log(query);
-    yelp.search({ ll: query.lat + ',' + query.lng, term: query.swingBy, limit: 3}, function (error, data) {
-        if (error) console.log(error);
+    //yelp.search({ ll: query.lat + ',' + query.lng, term: query.swingBy, limit: 3}, function (error, data) {
+
+    var params = { ll: query.lat + ',' + query.lng, term: query.swingBy.replace(/([^\w])/g, ' '), limit: 3}
+//	console.log(params)
+    yelp.search( params , function (error, data) {
+        if (error) { 
+		console.log(error);
+		response.write("{error:\"some error\"")
+		response.end();
+	}
+	else{
         response.write(JSON.stringify(data));
         response.end();
+	}
     });
 //    // See http://www.yelp.com/developers/documentation/v2/search_api
 //    yelp.search({term: "food", location: "Montreal"}, function(error, data) {
