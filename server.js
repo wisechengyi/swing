@@ -20,6 +20,7 @@ my_http.createServer(function (request, response) {
     if (query.lat==undefined || query.lng==undefined){
 	        response.write("{error:\"no location info\"")
                 response.end();
+		return;
 	}
     sys.puts("request accepted");
     // Request methods you wish to allow
