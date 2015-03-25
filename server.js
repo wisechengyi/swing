@@ -4,8 +4,8 @@
 var yelp = require("yelp").createClient({
     consumer_key: "KdT0yT_-m3yVEWoLm0-l9A",
     consumer_secret: "6ECPZTahZsZj0mUrfGdytqzV-pg",
-    token: "0JsP7tr7SPIBykUXJW7pUnHqAQuMcIoR",
-    token_secret: "FYhAyXw1X9P4PEGxsiAV0xz0Eyg"
+    token: "vQnhoH7rkMMmcd2HmM0wZPOV8g5S3KxS",
+    token_secret: "PiWl93dxPeh30W02ggZlzZEyaz4"
 });
 
 var sys = require("sys"),
@@ -43,7 +43,8 @@ my_http.createServer(function (request, response) {
     yelp.search( params , function (error, data) {
         if (error) { 
 		console.log(error);
-		response.write("{error:\"some error\"")
+//        response.write(error)
+		response.write('{error:"some error"}')
 		response.end();
 	}
 	else{
