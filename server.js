@@ -11,11 +11,15 @@ var yelp = require("yelp").createClient({
 var sys = require("sys"),
     my_http = require("http"),
     fileSystem = require('fs');
+
 my_http.createServer(function (request, response) {
 
 
-    query = getUrlVars(request.url);
-//	console.log(query);
+    query = getUrlVars(decodeURI(request.url));
+//    console.log(decodeURI(request.url))
+
+//    console.log(query);
+
     response.setHeader('Access-Control-Allow-Origin', '*');
     if (query.lat==undefined || query.lng==undefined){
 	        response.write("{error:\"no location info\"")
@@ -38,7 +42,10 @@ my_http.createServer(function (request, response) {
 //    console.log(query);
     //yelp.search({ ll: query.lat + ',' + query.lng, term: query.swingBy, limit: 3}, function (error, data) {
 
-    var params = { ll: query.lat + ',' + query.lng, term: query.swingBy.replace(/([^\w])/g, ' '), limit: 3}
+
+
+
+    var params = { ll: query.lat + ',' + query.lng, term: query.swingBy, limit: 3}
 //	console.log(params)
     yelp.search( params , function (error, data) {
         if (error) { 
@@ -59,8 +66,8 @@ my_http.createServer(function (request, response) {
 //    });
 
 
-}).listen(8080);
-sys.puts("Server Running on 8080");
+}).listen(8081);
+sys.puts("Server Running on 8081");
 
 
 
